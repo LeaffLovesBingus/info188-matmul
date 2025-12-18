@@ -189,7 +189,7 @@ void matmul_gpu_tensor_cores(float *a, float *b, float *c, int n) {
     cudaDeviceSynchronize();
 
     // Lanzar MATMUL
-    dim3 block(WARP_SIZE * 1, 1, 1);    // 1 warp
+    dim3 block(WARP_SIZE, 1, 1);    // 1 warp
     int tiles = (n + TENSOR_TILE_SIZE - 1) / TENSOR_TILE_SIZE;
     dim3 grid(tiles, tiles, 1);
 
@@ -238,7 +238,7 @@ int main(int argc, char **argv)
 	}
 
     print_matriz(A, n, "A");	
-    print_matriz(B, n, "B");	
+    print_matriz(B, n, "B");
     
     // 4.1) Preparar CPU
 	omp_set_num_threads(nt);
@@ -249,16 +249,61 @@ int main(int argc, char **argv)
     float *dA;
     float *dB;
     float *dC;
-    
-    if (alg > 1) {
-        cudaMalloc(&dA, sizeof(float)*n*n);
-        cudaMalloc(&dB, sizeof(float)*n*n);
-        cudaMalloc(&dC, sizeof(float)*n*n);
 
-        cudaMemcpy(dA, A, sizeof(float)*n*n, cudaMemcpyHostToDevice);
-        cudaMemcpy(dB, B, sizeof(float)*n*n, cudaMemcpyHostToDevice);
-    }
+    float *B_T;
+    int n_pad;
     
+    if (alg == 2 || alg == 3) {
+        cudaMalloc(&dA, sizeof(float) * n * n);
+        cudaMalloc(&dB, sizeof(float) * n * n);
+        cudaMalloc(&dC, sizeof(float) * n * n);
+
+        cudaMemcpy(dA, A, sizeof(float) * n * n, cudaMemcpyHostToDevice);
+        cudaMemcpy(dB, B, sizeof(float) * n * n, cudaMemcpyHostToDevice);
+    }
+
+    else if (alg == 4) {
+        // Trasponer la matriz B para que quede como columnas contiguas en memoria
+        B_T = new float[n*n];
+        for (int i = 0; i < n; ++i){
+            for (int j = 0; j < n; ++j){
+                B_T[j*n + i] = B[i*n + j];
+            }
+        }
+
+        // Crear las matrices con padding para que estas puedan alcanzar un múltiplo de TENSOR_TILE_SIZE
+        n_pad = ((n + TENSOR_TILE_SIZE - 1) / TENSOR_TILE_SIZE) * TENSOR_TILE_SIZE;
+
+        float *a_pad = new float[n_pad * n_pad];
+        float *b_pad = new float[n_pad * n_pad];
+
+        for (int i = 0; i < n_pad * n_pad; ++i) {
+            a_pad[i] = 0.0f;
+            b_pad[i] = 0.0f;
+        }
+
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; ++j) {
+                a_pad[i * n_pad + j] = A[i * n + j];
+                b_pad[i * n_pad + j] = B_T[i * n + j];
+            }
+        }
+
+        // Crear matrices con padding en GPU
+        cudaMalloc(&dA, sizeof(float) * n_pad * n_pad);
+        cudaMalloc(&dB, sizeof(float) * n_pad * n_pad);
+        cudaMalloc(&dC, sizeof(float) * n_pad * n_pad);
+
+        cudaMemset(dA, 0, sizeof(float) * n_pad * n_pad);
+        cudaMemset(dB, 0, sizeof(float) * n_pad * n_pad);
+
+        cudaMemcpy(dA, a_pad, sizeof(float) * n_pad * n_pad, cudaMemcpyHostToDevice);
+        cudaMemcpy(dB, b_pad, sizeof(float) * n_pad * n_pad, cudaMemcpyHostToDevice);
+
+        delete [] a_pad;
+        delete [] b_pad;
+    }
+
     // 5) Ejecutar Algoritmo Seleccionado
     double t1, t2;
     t1 = omp_get_wtime();
@@ -279,23 +324,38 @@ int main(int argc, char **argv)
             break;
         case 4:
             algoritmo_usado = "GPU Tensor Cores";
-            matmul_gpu_tensor_cores(dA, dB, dC, n);
+            matmul_gpu_tensor_cores(dA, dB, dC, n_pad);
             break;
 	}
 	t2 = omp_get_wtime();
     cudaDeviceSynchronize();
 
-    cudaMemcpy(C, dC, sizeof(float)*n*n, cudaMemcpyDeviceToHost);
+    if (alg == 2 || alg == 3) {
+        cudaMemcpy(C, dC, sizeof(float) * n * n, cudaMemcpyDeviceToHost);
+    }
+    else if (alg == 4) {
+        float *c_pad = new float[n_pad * n_pad];
 
-	// 6) Ver resultado	
+        cudaMemcpy(c_pad, dC, sizeof(float) * n_pad * n_pad, cudaMemcpyDeviceToHost);
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; ++j) {
+                C[i*n + j] = c_pad[i*n_pad + j];
+            }
+        }
+
+        delete [] c_pad;
+    }
+
+	// 6) Ver resultado
     print_matriz(C, n, "C");	
 	//printf("%sAlgoritmo [%s] listo: %f secs\n", AZUL, algoritmo_usado, t2-t1);
-    std::cout << AZUL << "Algoritmo [" + algoritmo_usado + "] terminó en " << t2-t1 << " segundos" << RESET << std::endl;
+    std::cout << AZUL << "Algoritmo " << CIAN << "[" + algoritmo_usado + "]" << AZUL << " terminó en " << t2-t1 << " segundos" << RESET << std::endl;
 
     // 7) Liberar memoria
     delete[] A;
     delete[] B;
     delete[] C;
+    if (alg == 4) delete[] B_T;
     cudaFree(dA);
     cudaFree(dB);
     cudaFree(dC);

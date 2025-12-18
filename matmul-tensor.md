@@ -28,11 +28,14 @@ _**\*WMMA (Warp Matrix Multiply Accumulate)**: API de CUDA que permite utilizar 
 
 Para multiplicar matrices con tensor cores, un warp completo coopera para calcular un _tile_ entero de `A * B`. Ese _tile_ se calcula con las operaciones de tipo `D = A * B + C` vistas anteriormente utilizando instrucciones de hardware. Como en este caso solo queremos programar la multiplicación de matrices, la matriz `C` será inicialmente una matriz nula, luego, tendrá los resultados parciales del cálculo de cada _tile_.
 
+_Como se opera la matriz en tiles, para multiplicar matrices cuyas dimensiones no son múltiplos de 16 se necesita hacer padding, que en pocas palabras es aumentar el tamaño de la matriz con ceros para que esta pueda ser cubierta por tiles de 16x16. Esto se hace en CPU previo a la ejecución del kernel._
+
 #### Restricciones para programar en Tensor cores
 - Se opera sobre bloques fijos de threads (warps).
 - Los inputs deben ser `half` o flotantes de 16 bits `FP16`.
 - La acumulación es `FP32`.
 - El cómputo ocurre por warp.
+
 
 Al programar con `WMMA`, aparece el concepto de _fragmento_, el cual es una estructura lógica que representa una submatriz (en este caso a lo que nos referimos como _tile_) cuyo contenido está distribuido internamente entre los 32 threads del warp, utilizando registros de la GPU. 
 
