@@ -20,6 +20,17 @@ Con el fin de evaluar el rendimiento de cada opción, se realizaron pruebas util
 
 ---
 
+
+
+![](./img/CPU.png)
+
+![](./img/GPU.png)
+
+![](./img/Speedup-GPU-vs-CPU.png)
+
+
+---
+
 ## Hardware utilizado para los tests
 ### CPU
 |Especificaciones CPU||
