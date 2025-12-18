@@ -144,11 +144,52 @@ El puntero `c_tile` apunta a una submatriz específica de la matriz `C`.
 `store_matrix_sync` guarda los datos del fragmento acumulador en la memoria global (gracias al puntero a la submatriz `c_tile`).
 `mem_row_major` indica que la matriz está almacenada como filas contiguas en memoria.
 
-|Specs GPU Bingus (GPU tests tensor)||
+### Código completo
+```cpp
+__global__ void kernel_matmul_gputs(half *a, half *b, float *c, int n) {
+    using namespace nvcuda;
+
+    // Identidad del tile
+    int tileRow = blockIdx.y;
+    int tileCol = blockIdx.x;
+
+    int row = tileRow * TENSOR_TILE_SIZE;
+    int col = tileCol * TENSOR_TILE_SIZE;
+
+    // Creación e inicialización del fragmento acumulador
+    // Como solo queremos multiplicar las matrices, la matriz acumuladora la llenamos de 0
+    wmma::fragment<wmma::accumulator, TENSOR_TILE_SIZE, TENSOR_TILE_SIZE, TENSOR_TILE_SIZE, float> c_frag;
+    wmma::fill_fragment(c_frag, 0.0f);
+
+    for (int k0 = 0; k0 < n; k0 += TENSOR_TILE_SIZE) {
+        // Punteros al inicio de la submatriz (tile)
+        const half *a_tile = a + row * n + k0;
+        const half *b_tile = b + k0 * n + col;
+
+        // Fragmentos de entrada para los tensor cores
+        wmma::fragment<wmma::matrix_a, TENSOR_TILE_SIZE, TENSOR_TILE_SIZE, TENSOR_TILE_SIZE, half, wmma::row_major> a_frag;
+        wmma::fragment<wmma::matrix_b, TENSOR_TILE_SIZE, TENSOR_TILE_SIZE, TENSOR_TILE_SIZE, half, wmma::col_major> b_frag;
+
+        // Cargar matrices desde la memoria global hacia los registros del warp
+        wmma::load_matrix_sync(a_frag, a_tile, n);
+        wmma::load_matrix_sync(b_frag, b_tile, n);
+
+        // Multiplicar las matrices (D = A * B + C)
+        wmma::mma_sync(c_frag, a_frag, b_frag, c_frag);
+    }
+
+    // Guardar resultado
+    float *c_tile = c + row * n + col;
+    wmma::store_matrix_sync(c_tile, c_frag, n, wmma::mem_row_major);
+}
+```
+
+## Especificaciones GPU donde serán realizados los tests
+|Specs GPU Bingus||
 |------|--------------|
 |Nombre|RTX 2060 Super|
 |Procesador gráfico|TU106|
-|Arquitectura|Turing|
+|Arquitectura|_Turing_|
 |Reloj base|1470 MHz|
 |Reloj boost|1650 MHz|
 |VRAM|8 GB|
