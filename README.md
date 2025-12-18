@@ -16,7 +16,7 @@ En esta tarea se implementó la multiplicación de matrices con diferentes enfoq
 - Paralelismo en GPU con **memoria compartida**.
 - Paralelismo en GPU con **tensor cores**.
 
-Con el fin de evaluar el rendimiento de cada opción, se realizaron pruebas utilizando diferentes tamaños de entrada (matrices cuadradas`n*n`) y se midió el tiempo de ejecución en cada caso. Con los tiempos de medición, también se determinó el speedup o aceleración de las tres implementaciones en GPU con respecto al paralelismo en CPU con OpenMP.
+Con el fin de evaluar el rendimiento de cada opción, se realizaron pruebas utilizando diferentes tamaños de entrada (matrices cuadradas `n*n`) y se midió el tiempo de ejecución en cada caso. Con los tiempos medidos, también se determinó el speedup/aceleración de las tres implementaciones en GPU con respecto al paralelismo en CPU.
 
 ---
 
