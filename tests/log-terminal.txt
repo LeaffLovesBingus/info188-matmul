@@ -1,0 +1,206 @@
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 10000 16 4
+Algoritmo [GPU Tensor Cores] terminó en 1.8255214110 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 128 12 1
+Algoritmo [CPU Multicore] terminó en 0.0143469060 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 256 12 1
+Algoritmo [CPU Multicore] terminó en 0.0078429200 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 384 12 1
+Algoritmo [CPU Multicore] terminó en 0.0354431550 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 512 12 1
+Algoritmo [CPU Multicore] terminó en 0.0734004670 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 768 12 1
+Algoritmo [CPU Multicore] terminó en 0.2007918830 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 1024 12 1
+Algoritmo [CPU Multicore] terminó en 0.9390585850 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 1536 12 1
+Algoritmo [CPU Multicore] terminó en 4.1836308000 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 1536 12 1
+Algoritmo [CPU Multicore] terminó en 4.1708512620 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 2048 12 1
+Algoritmo [CPU Multicore] terminó en 26.7366251100 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 2048 12 1
+Algoritmo [CPU Multicore] terminó en 25.5211061130 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 3072 12 1
+Algoritmo [CPU Multicore] terminó en 119.1420602270 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 4096 12 1
+Algoritmo [CPU Multicore] terminó en 291.1203117980 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 128 12 2
+Algoritmo [GPU Básico] terminó en 0.0002992480 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 256 12 2
+Algoritmo [GPU Básico] terminó en 0.0007204610 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 384 12 2
+Algoritmo [GPU Básico] terminó en 0.0005734850 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 512 12 2
+Algoritmo [GPU Básico] terminó en 0.0005976600 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 768 12 2
+Algoritmo [GPU Básico] terminó en 0.0006488420 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 1024 12 2
+Algoritmo [GPU Básico] terminó en 0.0005904150 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 1536 12 2
+Algoritmo [GPU Básico] terminó en 0.0008477100 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 2048 12 2
+Algoritmo [GPU Básico] terminó en 0.0008999950 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 3072 12 2
+Algoritmo [GPU Básico] terminó en 0.0010462290 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 4096 12 2
+Algoritmo [GPU Básico] terminó en 0.0009997540 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 4096 12 2
+Algoritmo [GPU Básico] terminó en 0.0012567170 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 128 12 3
+Algoritmo [GPU Memoria Compartida] terminó en 0.0004970380 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 256 12 3
+Algoritmo [GPU Memoria Compartida] terminó en 0.0004300920 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 384 12 2
+Algoritmo [GPU Básico] terminó en 0.0003977310 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 384 12 3
+Algoritmo [GPU Memoria Compartida] terminó en 0.0008394720 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 512 12 3
+Algoritmo [GPU Memoria Compartida] terminó en 0.0016806900 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 768 12 2
+Algoritmo [GPU Básico] terminó en 0.0004267440 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 768 12 3
+Algoritmo [GPU Memoria Compartida] terminó en 0.0016752330 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 1024 12 3
+Algoritmo [GPU Memoria Compartida] terminó en 0.0061909740 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 1536 12 3
+Algoritmo [GPU Memoria Compartida] terminó en 0.0138057500 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 2048 12 3
+Algoritmo [GPU Memoria Compartida] terminó en 0.0334247900 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 3072 12 3
+Algoritmo [GPU Memoria Compartida] terminó en 0.0978105600 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 4096 12 3
+Algoritmo [GPU Memoria Compartida] terminó en 0.2297672930 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 128 12 4
+Algoritmo [GPU Tensor Cores] terminó en 0.0001576120 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 256 12 4
+Algoritmo [GPU Tensor Cores] terminó en 0.0002450700 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 384 12 4
+Algoritmo [GPU Tensor Cores] terminó en 0.0011518370 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 512 12 4
+Algoritmo [GPU Tensor Cores] terminó en 0.0003955350 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 768 12 4
+Algoritmo [GPU Tensor Cores] terminó en 0.0016766880 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 1024 12 4
+Algoritmo [GPU Tensor Cores] terminó en 0.0025582770 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 1536 12 4
+Algoritmo [GPU Tensor Cores] terminó en 0.0051658430 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 1536 12 4
+Algoritmo [GPU Tensor Cores] terminó en 0.0054224230 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 2048 12 4
+Algoritmo [GPU Tensor Cores] terminó en 0.0101382430 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 3072 12 4
+Algoritmo [GPU Tensor Cores] terminó en 0.0410200060 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 4096 12 4
+Algoritmo [GPU Tensor Cores] terminó en 0.0637630060 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 5120 12 2
+Algoritmo [GPU Básico] terminó en 0.0012256700 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 5120 12 2
+Algoritmo [GPU Básico] terminó en 0.0010434650 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 6144 12 2
+Algoritmo [GPU Básico] terminó en 0.0011579500 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 7168 12 2
+Algoritmo [GPU Básico] terminó en 0.0012604000 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 8192 12 2
+Algoritmo [GPU Básico] terminó en 0.0013803870 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 9216 12 2
+Algoritmo [GPU Básico] terminó en 0.0025254710 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 10240 12 2
+Algoritmo [GPU Básico] terminó en 0.0018765850 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 10240 12 2
+Algoritmo [GPU Básico] terminó en 0.0017965700 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 11264 12 2
+Algoritmo [GPU Básico] terminó en 0.0020011840 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 12288 12 2
+Algoritmo [GPU Básico] terminó en 0.0024433650 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 14336 12 2
+Algoritmo [GPU Básico] terminó en 0.0027110680 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 16384 12 2
+Algoritmo [GPU Básico] terminó en 0.0042012370 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 5120 12 3
+Algoritmo [GPU Memoria Compartida] terminó en 0.3593107230 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 5120 12 4
+Algoritmo [GPU Tensor Cores] terminó en 0.1990637390 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 6144 12 3
+Algoritmo [GPU Memoria Compartida] terminó en 0.6116314430 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 6144 12 4
+Algoritmo [GPU Tensor Cores] terminó en 0.3733942490 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 7168 12 3
+Algoritmo [GPU Memoria Compartida] terminó en 0.9526848180 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 7168 12 4
+Algoritmo [GPU Tensor Cores] terminó en 0.7026894090 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 8192 12 3
+Algoritmo [GPU Memoria Compartida] terminó en 1.3528625280 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 8192 12 4
+Algoritmo [GPU Tensor Cores] terminó en 0.4289287600 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 7168 12 4
+Algoritmo [GPU Tensor Cores] terminó en 0.5879453810 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 7168 12 4
+Algoritmo [GPU Tensor Cores] terminó en 0.5873933690 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 9216 12 3
+Algoritmo [GPU Memoria Compartida] terminó en 1.8856262820 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 9216 12 4
+Algoritmo [GPU Tensor Cores] terminó en 1.3336137550 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 9216 12 4
+Algoritmo [GPU Tensor Cores] terminó en 1.3905026880 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 10240 12 3
+Algoritmo [GPU Memoria Compartida] terminó en 2.7268871370 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 10240 12 4
+Algoritmo [GPU Tensor Cores] terminó en 2.0549595260 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 11264 12 3
+Algoritmo [GPU Memoria Compartida] terminó en 3.6400171810 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 11264 12 4
+Algoritmo [GPU Tensor Cores] terminó en 2.6623971330 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ make
+nvcc -arch=sm_75 -Xcompiler -fopenmp main.cu -o prog
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 12288 12 3
+Algoritmo [GPU Memoria Compartida] terminó en 4.5009003030 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 12288 12 4
+Algoritmo [GPU Tensor Cores] terminó en 3.3427109540 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 14336 12 3
+Algoritmo [GPU Memoria Compartida] terminó en 7.2633403990 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 14336 12 4
+Algoritmo [GPU Tensor Cores] terminó en 5.4846108610 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 16384 12 3
+Algoritmo [GPU Memoria Compartida] terminó en 10.5092756830 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 16384 12 4
+Algoritmo [GPU Tensor Cores] terminó en 8.1343525080 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 128 12 2
+Algoritmo [GPU Básico] terminó en 0.0002754000 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 256 12 2
+Algoritmo [GPU Básico] terminó en 0.0004431730 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 384 12 2
+Algoritmo [GPU Básico] terminó en 0.0006647700 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 512 12 2
+Algoritmo [GPU Básico] terminó en 0.0009834620 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 768 12 2
+Algoritmo [GPU Básico] terminó en 0.0023767810 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 1024 12 2
+Algoritmo [GPU Básico] terminó en 0.0070057170 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 1536 12 2
+Algoritmo [GPU Básico] terminó en 0.0201884150 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 2048 12 2
+Algoritmo [GPU Básico] terminó en 0.0463592470 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 3072 12 2
+Algoritmo [GPU Básico] terminó en 0.1509938780 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 4096 12 2
+Algoritmo [GPU Básico] terminó en 0.2942317810 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 5120 12 2
+Algoritmo [GPU Básico] terminó en 0.6758620170 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 6144 12 2
+Algoritmo [GPU Básico] terminó en 0.9355046150 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 7168 12 2
+Algoritmo [GPU Básico] terminó en 1.5229942260 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 8192 12 2
+Algoritmo [GPU Básico] terminó en 2.1367795650 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 9216 12 2
+Algoritmo [GPU Básico] terminó en 4.0429050980 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 10240 12 2
+Algoritmo [GPU Básico] terminó en 5.9810743980 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 11264 12 2
+Algoritmo [GPU Básico] terminó en 8.8123709410 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 12288 12 2
+Algoritmo [GPU Básico] terminó en 11.8462242940 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 14336 12 2
+Algoritmo [GPU Básico] terminó en 18.4630770480 segundos
+bingus@DESKTOP-O72LIQ8:/mnt/l/.Almacenaje/codigos/info188-matmul$ ./prog 16384 12 2
+Algoritmo [GPU Básico] terminó en 30.8906202640 segundos

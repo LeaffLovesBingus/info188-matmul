@@ -62,18 +62,20 @@ void matmul_cpu(int n, float *A, float *B, float *C){
 __global__ void kernel_matmul_gpu(int n, float *A, float *B, float *C){
     int tx = blockIdx.x * blockDim.x + threadIdx.x;
     int ty = blockIdx.y * blockDim.y + threadIdx.y;
-    float sum = 0.0f;
+    
+    if (ty < n && tx < n) {
+        float sum = 0.0f;
+        for (int k = 0; k < n; ++k)
+            sum += A[ty*n + k] * B[k*n + tx];
 
-    for (int k = 0; k < n; ++k)
-        sum += A[ty*n + k] * B[k*n + tx];
-
-    C[ty*n + tx] = sum;
+        C[ty*n + tx] = sum;
+    }
 }
 
 
 void matmul_gpu(float *a, float *b, float *c, int n) {
-    dim3 block(512, 1, 1);
-    dim3 grid( (n + block.x - 1)/block.x, 1, 1);
+    dim3 block(16, 16);
+    dim3 grid((n + block.x - 1)/block.x, (n + block.y - 1)/block.y);
     kernel_matmul_gpu<<<grid, block>>>(n, a, b, c);
     cudaDeviceSynchronize();
 }
@@ -349,7 +351,11 @@ int main(int argc, char **argv)
 	// 6) Ver resultado
     print_matriz(C, n, "C");	
 	//printf("%sAlgoritmo [%s] listo: %f secs\n", AZUL, algoritmo_usado, t2-t1);
-    std::cout << AZUL << "Algoritmo " << CIAN << "[" + algoritmo_usado + "]" << AZUL << " terminó en " << t2-t1 << " segundos" << RESET << std::endl;
+    std::cout << AZUL << "Algoritmo " 
+            << CIAN << "[" + algoritmo_usado + "]" 
+            << AZUL << " terminó en " 
+            << MAGENTA << t2-t1 
+            << AZUL << " segundos" << RESET << std::endl;
 
     // 7) Liberar memoria
     delete[] A;

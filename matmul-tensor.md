@@ -189,28 +189,8 @@ __global__ void kernel_matmul_gputs(half *a, half *b, float *c, int n) {
 
 _NOTA: Esta implementación utiliza un solo warp por bloque por simplicidad. Implementaciones optimizadas pueden usar múltiples warps por bloque para aumentar la ocupación del SM._
 
-## Especificaciones GPU donde serán realizados los tests
-|Specs GPU Bingus||
-|------|--------------|
-|Nombre|RTX 2060 Super|
-|Procesador gráfico|TU106|
-|Arquitectura|_Turing_|
-|Reloj base|1470 MHz|
-|Reloj boost|1650 MHz|
-|VRAM|8 GB|
-|Tipo VRAM|GDDR6|
-|Ancho de banda VRAM|448.0 GB/s|
-|CUDA Cores|2176|
-|Tensor Cores|272|
-|Tensor Cores por SM|8|
-|Rendimiento FP16 (half)|14.36 TFLOPS|
-|Rendimiento FP32 (float)|7.181 TFLOPS|
-|Rendimiento FP64 (double)|224.4 GFLOPS|
-|Versión CUDA|7.5|
-
 ## Referencias
 - [Documentación oficial de Nvidia sobre Tensor cores](https://developer.nvidia.com/blog/programming-tensor-cores-cuda-9/)
 - [Blog explicativo sobre la programación sobre Tensor cores](https://leimao.github.io/blog/NVIDIA-Tensor-Core-Programming/)
 - [Video explicativo sobre programación en Tensor cores](https://youtu.be/Yt1A-vaWTck?si=3m5EwRk-dz3hGI70)
-- [Especificaciones RTX 2060 Super](https://www.techpowerup.com/gpu-specs/geforce-rtx-2060-super.c3441)
 - Aclaración de definiciones específicas y traducción de material con _ChatGPT_
