@@ -2,6 +2,7 @@
 #include <omp.h>
 #include <cstdlib>
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <random>
 #include <cuda_fp16.h>  // Tipo half
@@ -26,10 +27,11 @@
 
 //
 #define TENSOR_TILE_SIZE 16
+#define WARP_SIZE 32
 
 
 void print_matriz(float *m, int n, const char *msg){
-    if(n > 40){
+    if(n > 30){
 		return;
 	}
 	printf("%s: \n", msg);
@@ -56,6 +58,7 @@ void matmul_cpu(int n, float *A, float *B, float *C){
 	}
 }
 
+
 __global__ void kernel_matmul_gpu(int n, float *A, float *B, float *C){
     int tx = blockIdx.x * blockDim.x + threadIdx.x;
     int ty = blockIdx.y * blockDim.y + threadIdx.y;
@@ -66,6 +69,15 @@ __global__ void kernel_matmul_gpu(int n, float *A, float *B, float *C){
 
     C[ty*n + tx] = sum;
 }
+
+
+void matmul_gpu(float *a, float *b, float *c, int n) {
+    dim3 block(512, 1, 1);
+    dim3 grid( (n + block.x - 1)/block.x, 1, 1);
+    kernel_matmul_gpu<<<grid, block>>>(n, a, b, c);
+    cudaDeviceSynchronize();
+}
+
 
 __global__ void kernel_matmul_gpusm(int n, float *A, float *B, float *C){
     // Declaración memoria compartida
@@ -108,6 +120,14 @@ __global__ void kernel_matmul_gpusm(int n, float *A, float *B, float *C){
 }
 
 
+void matmul_gpu_shared_memory(float *a, float *b, float *c, int n) {
+    dim3 block(TILE_SIZE, TILE_SIZE);
+    dim3 grid((n + TILE_SIZE - 1) / TILE_SIZE, (n + TILE_SIZE - 1) / TILE_SIZE);
+    kernel_matmul_gpusm<<<grid, block>>>(n, a, b, c);
+    cudaDeviceSynchronize();
+}
+
+
 __global__ void kernel_matmul_gputs(half *a, half *b, float *c, int n) {
     using namespace nvcuda;
 
@@ -146,8 +166,46 @@ __global__ void kernel_matmul_gputs(half *a, half *b, float *c, int n) {
 }
 
 
+__global__ void float_to_half(const float *input, half *output, int n) {
+    int idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if (idx < n * n) {
+        output[idx] = __float2half(input[idx]);
+    }
+}
+
+
+void matmul_gpu_tensor_cores(float *a, float *b, float *c, int n) {
+    // Transformar A y B a half*
+    half *dA, *dB;
+    cudaMalloc(&dA, sizeof(half) * n * n);
+    cudaMalloc(&dB, sizeof(half) * n * n);
+
+    int threads = 256;
+    int blocks = (n * n + threads - 1) / threads;
+
+    float_to_half<<<blocks, threads>>>(a, dA, n);
+    float_to_half<<<blocks, threads>>>(b, dB, n);
+
+    cudaDeviceSynchronize();
+
+    // Lanzar MATMUL
+    dim3 block(WARP_SIZE * 1, 1, 1);    // 1 warp
+    int tiles = (n + TENSOR_TILE_SIZE - 1) / TENSOR_TILE_SIZE;
+    dim3 grid(tiles, tiles, 1);
+
+    kernel_matmul_gputs<<<grid, block>>>(dA, dB, c, n);
+
+    cudaDeviceSynchronize();
+
+    cudaFree(dA);
+    cudaFree(dB);
+}
+
+
 int main(int argc, char **argv) 
 {
+    std::cout << std::fixed << std::setprecision(10);
+
     // 1) argumentos
     if (argc != 4) {
         std::cerr << AMARILLO << "Ejecutar como ./prog <n> <nt> <ALG>" << RESET << std::endl;
@@ -185,8 +243,7 @@ int main(int argc, char **argv)
     // 4.1) Preparar CPU
 	omp_set_num_threads(nt);
 
-    // 4.2) Prepara GPU
-
+    // 4.2) Preparar GPU
     cudaSetDevice(0);
 
     float *dA;
@@ -214,20 +271,15 @@ int main(int argc, char **argv)
             break;
         case 2:
             algoritmo_usado = "GPU Básico";
-            dim3 block(512, 1, 1);
-            dim3 grid( (n + block.x - 1)/block.x, 1, 1);
-            kernel_matmul_gpu<<<grid, block>>>(n, dA, dB, dC);
-            cudaDeviceSynchronize();
+            matmul_gpu(dA, dB, dC, n);
             break;
         case 3:
             algoritmo_usado = "GPU Memoria Compartida";
-            dim3 block(TILE_SIZE, TILE_SIZE);
-            dim3 grid((n + TILE_SIZE - 1) / TILE_SIZE, (n + TILE_SIZE - 1) / TILE_SIZE);
-            kernel_matmul_gpusm<<<grid, block>>>(n, dA, dB, dC);
-            cudaDeviceSynchronize();
+            matmul_gpu_shared_memory(dA, dB, dC, n);
             break;
         case 4:
             algoritmo_usado = "GPU Tensor Cores";
+            matmul_gpu_tensor_cores(dA, dB, dC, n);
             break;
 	}
 	t2 = omp_get_wtime();
@@ -237,7 +289,8 @@ int main(int argc, char **argv)
 
 	// 6) Ver resultado	
     print_matriz(C, n, "C");	
-	printf("Algoritmo %s listo: %f secs\n", algoritmo_usado, t2-t1);
+	//printf("%sAlgoritmo [%s] listo: %f secs\n", AZUL, algoritmo_usado, t2-t1);
+    std::cout << AZUL << "Algoritmo [" + algoritmo_usado + "] terminó en " << t2-t1 << " segundos" << RESET << std::endl;
 
     // 7) Liberar memoria
     delete[] A;

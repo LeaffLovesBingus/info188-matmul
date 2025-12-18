@@ -1,6 +1,6 @@
 SOURCE := main.cu
 BIN := prog
-FLAGS := -Xcompiler -fopenmp
+FLAGS := -arch=sm_75 -Xcompiler -fopenmp
 COMPILER := nvcc
 
 all:

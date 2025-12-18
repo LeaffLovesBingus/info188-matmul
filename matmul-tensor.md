@@ -184,6 +184,8 @@ __global__ void kernel_matmul_gputs(half *a, half *b, float *c, int n) {
 }
 ```
 
+_NOTA: Esta implementación utiliza un solo warp por bloque por simplicidad. Implementaciones optimizadas pueden usar múltiples warps por bloque para aumentar la ocupación del SM._
+
 ## Especificaciones GPU donde serán realizados los tests
 |Specs GPU Bingus||
 |------|--------------|
@@ -197,6 +199,7 @@ __global__ void kernel_matmul_gputs(half *a, half *b, float *c, int n) {
 |Ancho de banda VRAM|448.0 GB/s|
 |CUDA Cores|2176|
 |Tensor Cores|272|
+|Tensor Cores por SM|8|
 |Rendimiento FP16 (half)|14.36 TFLOPS|
 |Rendimiento FP32 (float)|7.181 TFLOPS|
 |Rendimiento FP64 (double)|224.4 GFLOPS|
