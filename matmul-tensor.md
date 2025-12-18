@@ -161,7 +161,7 @@ El puntero `c_tile` apunta a una submatriz específica de la matriz `C`.
 |Rendimiento FP64 (double)|224.4 GFLOPS|
 |Versión CUDA|7.5|
 
-## Bibliografía
+## Referencias
 - [Documentación oficial de Nvidia sobre Tensor cores](https://developer.nvidia.com/blog/programming-tensor-cores-cuda-9/)
 - [Blog explicativo sobre la programación sobre Tensor cores](https://leimao.github.io/blog/NVIDIA-Tensor-Core-Programming/)
 - [Video explicativo sobre programación en Tensor cores](https://youtu.be/Yt1A-vaWTck?si=3m5EwRk-dz3hGI70)
