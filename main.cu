@@ -4,6 +4,9 @@
 #include <iostream>
 #include <string>
 #include <random>
+#include <cuda_fp16.h>  // Tipo half
+#include <mma.h>        // Tensor cores
+
 
 // Colores :)
 #define ROJO "\033[31m"
@@ -16,13 +19,17 @@
 #define RESET "\033[0m"
 
 // Define tamaño bloque a procesar en shared memory (Ej: sub-bloques 16*16)
-// 16 es valor más comun y eficnete en mayoria de GPUS
+// 16 es valor más comun y eficiente en mayoria de GPUS
 // 8 es útil en GPUs con menos recursos
 // 32 puede aprovechar mejor GPUs recientes, pero usa más recursos por bloque
 #define TILE_SIZE 16
 
+//
+#define TENSOR_TILE_SIZE 16
+
+
 void print_matriz(float *m, int n, const char *msg){
-	if(n > 40){
+    if(n > 40){
 		return;
 	}
 	printf("%s: \n", msg);
@@ -101,6 +108,44 @@ __global__ void kernel_matmul_gpusm(int n, float *A, float *B, float *C){
 }
 
 
+__global__ void kernel_matmul_gputs(half *a, half *b, float *c, int n) {
+    using namespace nvcuda;
+
+    // Identidad del tile
+    int tileRow = blockIdx.y;
+    int tileCol = blockIdx.x;
+
+    int row = tileRow * TENSOR_TILE_SIZE;
+    int col = tileCol * TENSOR_TILE_SIZE;
+
+    // Creación e inicialización del fragmento acumulador
+    // Como solo queremos multiplicar las matrices, la matriz acumuladora la llenamos de 0
+    wmma::fragment<wmma::accumulator, TENSOR_TILE_SIZE, TENSOR_TILE_SIZE, TENSOR_TILE_SIZE, float> c_frag;
+    wmma::fill_fragment(c_frag, 0.0f);
+
+    for (int k0 = 0; k0 < n; k0 += TENSOR_TILE_SIZE) {
+        // Punteros al inicio de la submatriz (tile)
+        const half *a_tile = a + row * n + k0;
+        const half *b_tile = b + k0 * n + col;
+
+        // Fragmentos de entrada para los tensor cores
+        wmma::fragment<wmma::matrix_a, TENSOR_TILE_SIZE, TENSOR_TILE_SIZE, TENSOR_TILE_SIZE, half, wmma::row_major> a_frag;
+        wmma::fragment<wmma::matrix_b, TENSOR_TILE_SIZE, TENSOR_TILE_SIZE, TENSOR_TILE_SIZE, half, wmma::col_major> b_frag;
+
+        // Cargar matrices desde la memoria global hacia los registros del warp
+        wmma::load_matrix_sync(a_frag, a_tile, n);
+        wmma::load_matrix_sync(b_frag, b_tile, n);
+
+        // Multiplicar las matrices (D = A * B + C)
+        wmma::mma_sync(c_frag, a_frag, b_frag, c_frag);
+    }
+
+    // Guardar resultado
+    float *c_tile = c + row * n + col;
+    wmma::store_matrix_sync(c_tile, c_frag, n, wmma::mem_row_major);
+}
+
+
 int main(int argc, char **argv) 
 {
     // 1) argumentos
@@ -147,14 +192,15 @@ int main(int argc, char **argv)
     float *dA;
     float *dB;
     float *dC;
+    
+    if (alg > 1) {
+        cudaMalloc(&dA, sizeof(float)*n*n);
+        cudaMalloc(&dB, sizeof(float)*n*n);
+        cudaMalloc(&dC, sizeof(float)*n*n);
 
-    cudaMalloc(&dA, sizeof(float)*n*n);
-    cudaMalloc(&dB, sizeof(float)*n*n);
-    cudaMalloc(&dC, sizeof(float)*n*n);
-
-    cudaMemcpy(dA, A, sizeof(float)*n*n, cudaMemcpyHostToDevice);
-    cudaMemcpy(dB, B, sizeof(float)*n*n, cudaMemcpyHostToDevice);
-
+        cudaMemcpy(dA, A, sizeof(float)*n*n, cudaMemcpyHostToDevice);
+        cudaMemcpy(dB, B, sizeof(float)*n*n, cudaMemcpyHostToDevice);
+    }
     
     // 5) Ejecutar Algoritmo Seleccionado
     double t1, t2;
@@ -170,14 +216,14 @@ int main(int argc, char **argv)
             algoritmo_usado = "GPU Básico";
             dim3 block(512, 1, 1);
             dim3 grid( (n + block.x - 1)/block.x, 1, 1);
-            kernel_matmul_gpu<<grid, block>>(n, dA, dB, dC);
+            kernel_matmul_gpu<<<grid, block>>>(n, dA, dB, dC);
             cudaDeviceSynchronize();
             break;
         case 3:
             algoritmo_usado = "GPU Memoria Compartida";
             dim3 block(TILE_SIZE, TILE_SIZE);
             dim3 grid((n + TILE_SIZE - 1) / TILE_SIZE, (n + TILE_SIZE - 1) / TILE_SIZE);
-            kernel_matmul_gpusm<<grid, block>>(n, dA, dB, dC);
+            kernel_matmul_gpusm<<<grid, block>>>(n, dA, dB, dC);
             cudaDeviceSynchronize();
             break;
         case 4:
