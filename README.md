@@ -11,10 +11,12 @@
 
 La multiplicación de matrices es una operación fundamental en la computación, como se nos ha mencionado en clases, para la simulación física y el entrenamiento de redes neuronales. Al tratarse de una operación con complejidad secuencial de orden cúbico, la manera en que se implementa puede tener un impacto significativo en el rendimiento y eficiencia de los sistemas, con el riesgo de que se dispare el runtime en función del tamaño de las entradas. Por ello, resulta crucial explorar opciones de paralelización para reducir el tiempo de cómputo excesivo.
 
-En esta tarea se implementó la multiplicación de matrices con diferentes enfoques de procesamiento paralelo para comparar el rendimiento. Se programaron: la **multiplicación de matrices con OpenMP** (paralelismo en CPU) y la **multiplicación de matrices con CUDA** (paralelismo en GPU). Más aún, dentro de las opciones de implementación con CUDA, se estudiaron tres opciones:
-- Paralelismo en GPU básico (con el approach tratado en clases).
-- Paralelismo en GPU con **memoria compartida**.
-- Paralelismo en GPU con **tensor cores**.
+En esta tarea se implementó la multiplicación de matrices con diferentes enfoques de procesamiento en paralelo:
+1. Paralelismo en CPU.
+2. Paralelismo en GPU básico (con el approach tratado en clases).
+3. Paralelismo en GPU con **memoria compartida**.
+4. Paralelismo en GPU con **tensor cores**.
+El paralelismo en CPU fue programado con OpenMP (`#pragma omp parallel for`), mientras que las otras tres opciones se trabajaron con CUDA (NVIDIA).
 
 Con el fin de evaluar el rendimiento de cada opción, se realizaron pruebas utilizando diferentes tamaños de entrada (matrices cuadradas `n*n`) y se midió el tiempo de ejecución en cada caso. Con los tiempos medidos, también se determinó el speedup/aceleración de las tres implementaciones en GPU con respecto al paralelismo en CPU.
 
