@@ -23,16 +23,13 @@ Con el fin de evaluar el rendimiento de cada opción, se realizaron pruebas util
 
 ---
 
-
+## Resultados
 
 ![](./img/CPU.png)
 
 ![](./img/GPU.png)
 
 ![](./img/Speedup-GPU-vs-CPU.png)
-
-
----
 
 ## Hardware utilizado para los tests
 ### CPU
@@ -74,6 +71,14 @@ Con el fin de evaluar el rendimiento de cada opción, se realizaron pruebas util
 |Rendimiento FP32 (float)|7.181 TFLOPS|
 |Rendimiento FP64 (double)|224.4 GFLOPS|
 |Versión CUDA|7.5|
+
+---
+
+## Interpretación de los resultados
+
+
+
+---
 
 ## Referencias
 #### Shared memory
