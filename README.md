@@ -74,7 +74,7 @@ Con el fin de evaluar el rendimiento de cada opción, se realizaron pruebas util
 
 ---
 
-## Interpretación de los resultados
+## Explicación e interpretación
 
 
 
