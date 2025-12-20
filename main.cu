@@ -62,7 +62,7 @@ void matmul_cpu(int n, float *A, float *B, float *C){
 __global__ void kernel_matmul_gpu(int n, float *A, float *B, float *C){
     int tx = blockIdx.x * blockDim.x + threadIdx.x;
     int ty = blockIdx.y * blockDim.y + threadIdx.y;
-    
+
     if (ty < n && tx < n) {
         float sum = 0.0f;
         for (int k = 0; k < n; ++k)
@@ -101,7 +101,7 @@ __global__ void kernel_matmul_gpusm(int n, float *A, float *B, float *C){
             tile_A[threadIdx.y * TILE_SIZE + threadIdx.x] = A[row * n + i * TILE_SIZE + threadIdx.x];
         else
             tile_A[threadIdx.y * TILE_SIZE + threadIdx.x] = 0.0f;
-    
+
         if (col < n && (i * TILE_SIZE + threadIdx.y) < n)
             tile_B[threadIdx.y * TILE_SIZE + threadIdx.x] = B[(i * TILE_SIZE + threadIdx.y) * n + col];
         else
@@ -116,8 +116,8 @@ __global__ void kernel_matmul_gpusm(int n, float *A, float *B, float *C){
         __syncthreads();
     }
      // Guardando resultado devuelta a memoria global
-    if(row < n && col < n)    
-        C[row * n + col] = sum; 
+    if(row < n && col < n)
+        C[row * n + col] = sum;
 
 }
 
@@ -148,7 +148,7 @@ __global__ void kernel_matmul_gputs(half *a, half *b, float *c, int n) {
     for (int k0 = 0; k0 < n; k0 += TENSOR_TILE_SIZE) {
         // Punteros al inicio de la submatriz (tile)
         const half *a_tile = a + row * n + k0;
-        const half *b_tile = b + k0 * n + col;
+        const half *b_tile = b + col * n + k0;
 
         // Fragmentos de entrada para los tensor cores
         wmma::fragment<wmma::matrix_a, TENSOR_TILE_SIZE, TENSOR_TILE_SIZE, TENSOR_TILE_SIZE, half, wmma::row_major> a_frag;
@@ -204,7 +204,7 @@ void matmul_gpu_tensor_cores(float *a, float *b, float *c, int n) {
 }
 
 
-int main(int argc, char **argv) 
+int main(int argc, char **argv)
 {
     std::cout << std::fixed << std::setprecision(10);
 
@@ -224,13 +224,13 @@ int main(int argc, char **argv)
     }
 
     // 2) alocar memoria arrays A, B, C
-	float *A = new float[n*n];  
-	float *B = new float[n*n];  
-	float *C = new float[n*n];  
+	float *A = new float[n*n];
+	float *B = new float[n*n];
+	float *C = new float[n*n];
 
     // 3) init arrays A, B
-	std::mt19937 gen(1313); 
-    std::uniform_real_distribution<> dis(0.0, 1.0); 
+	std::mt19937 gen(1313);
+    std::uniform_real_distribution<> dis(0.0, 1.0);
 
 	for(long i=0; i<n*n; ++i){
 		A[i] = (float) dis(gen);
@@ -239,9 +239,9 @@ int main(int argc, char **argv)
 		//B[i] = (float) (rand() % 10);
 	}
 
-    print_matriz(A, n, "A");	
+    print_matriz(A, n, "A");
     print_matriz(B, n, "B");
-    
+
     // 4.1) Preparar CPU
 	omp_set_num_threads(nt);
 
@@ -254,7 +254,7 @@ int main(int argc, char **argv)
 
     float *B_T;
     int n_pad;
-    
+
     if (alg == 2 || alg == 3) {
         cudaMalloc(&dA, sizeof(float) * n * n);
         cudaMalloc(&dB, sizeof(float) * n * n);
@@ -349,12 +349,12 @@ int main(int argc, char **argv)
     }
 
 	// 6) Ver resultado
-    print_matriz(C, n, "C");	
+    print_matriz(C, n, "C");
 	//printf("%sAlgoritmo [%s] listo: %f secs\n", AZUL, algoritmo_usado, t2-t1);
-    std::cout << AZUL << "Algoritmo " 
-            << CIAN << "[" + algoritmo_usado + "]" 
-            << AZUL << " terminó en " 
-            << MAGENTA << t2-t1 
+    std::cout << AZUL << "Algoritmo "
+            << CIAN << "[" + algoritmo_usado + "]"
+            << AZUL << " terminó en "
+            << MAGENTA << t2-t1
             << AZUL << " segundos" << RESET << std::endl;
 
     // 7) Liberar memoria
@@ -365,6 +365,6 @@ int main(int argc, char **argv)
     cudaFree(dA);
     cudaFree(dB);
     cudaFree(dC);
-    
+
     return EXIT_SUCCESS;
 }
