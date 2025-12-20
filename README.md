@@ -36,7 +36,7 @@ A partir de los experimentos realizados, se observa una diferencia de rendimient
 
 Como se evidencia en la tabla de resultados y en los gráficos, el tiempo de ejecución en la CPU crece drásticamente a medida que aumenta el tamaño de la matriz (cuadrada `n*n`). En el primer gráfico se distingue que, al llegar a `n = 3072`, el runtime alcanza las centenas de segundos, mientras que en las tres implementaciones paralelizadas en GPU las curvas se mantienen considerablemente cercanas al eje de las abscisas (en esta escala gráfica resultan indistinguibles).
 
-En el caso `n = 4096`, la implementación en CPU tardó **291.12 segundos**, mientras que la implementación básica/directa en GPU tardó **0.29 segundos**. Este caso representa un speedup de aproximadamente **989x**. La brecha en runtime que se abre con este tamaño de entrada se debe a que la CPU está limitada por un número mucho menor de núcleos físicos (6 núcleos, 12 hilos en el Ryzen 5 3600 utilizado).
+En el caso `n = 4096`, la implementación en CPU tardó **291.12 segundos**, mientras que la implementación básica/directa en GPU tardó **0.29 segundos**. Este caso representa un speedup de aproximadamente **989x**. La brecha en runtime se debe no solo a que la CPU está limitada por un número mucho menor de núcleos físicos (6 núcleos, 12 hilos en el Ryzen 5 3600 utilizado), sino también por la latencia de acceso a la memoria, contrastada con la capacidad superior de la GPU de explotar el paralelismo en cargas masivas de trabajo aritmético.
 
 ### Memoria global y memoria compartida
 
