@@ -19,7 +19,7 @@ En esta tarea se implementó la multiplicación de matrices con diferentes aplic
 
 El paralelismo en CPU fue programado con OpenMP (`#pragma omp parallel for`), mientras que las otras tres opciones se trabajaron con CUDA (NVIDIA). Los cuatro enfoques se encuentran en el mismo archivo [`main.cu`](./main.cu), que se compila con `make` y se ejecuta como:
 ```bash
-./prog <tamaño matriz> <número de threads CPU> <opción 1-4 de algoritmos>
+./prog <n tamaño matriz> <número de threads CPU> <opción 1-4 de algoritmos>
 ```
 
 Con el fin de evaluar el rendimiento de cada opción, se realizaron pruebas utilizando diferentes tamaños de entrada (matrices cuadradas `n*n`) y se midió el tiempo de ejecución en cada caso. Con los tiempos medidos, también se determinó el speedup/aceleración de las tres implementaciones en GPU con respecto al paralelismo en CPU.
@@ -38,9 +38,26 @@ Como se evidencia en la tabla de resultados y en los gráficos, el tiempo de eje
 
 En el caso `n = 4096`, la implementación en CPU tardó **291.12 segundos**, mientras que la implementación básica/directa en GPU tardó **0.29 segundos**. Este caso representa un speedup de aproximadamente **989x**. La brecha en runtime que se abre con este tamaño de entrada se debe a que la CPU está limitada por un número mucho menor de núcleos físicos (6 núcleos, 12 hilos en el Ryzen 5 3600 utilizado).
 
+### Memoria global y memoria compartida
+
 ![](./img/GPU.png)
 
+En el segundo gráfico se observa que la implementación básica en GPU (enfoque _naive_, línea roja) se degrada en rendimiento más rápido que las otras dos versiones a medida que aumenta `n`. Esto es porque la opción básica en GPU calcula las componentes de la matriz con accesos repetidos a la **memoria global** para obtener los valores en `A` y `B`. Como no existe reutilización de datos entre hilos de la GPU, estos tardan más en acceder a los datos de entrada que en calcular las componentes de salida.
+
+La curva amarilla, por otro lado, exhibe una mejora notable en redimiento. El uso de _tiling_ (con `TILE_SIZE 16`) permite que los hilos de un bloque carguen bloques de `A` y `B` mediante accesos coalescentes a memoria global y luego reutilicen esos datos desde memoria compartida, reduciendo drásticamente el número de accesos globales. Con `n = 16384`, la implementación en GPU básica demora **30.89 segundos**, mientras que la versión que aprovecha la shared memory tarda **10.51 segundos**.
+
 ![](./img/Speedup-GPU-vs-CPU.png)
+
+### Multiplicación de matrices con tensor cores
+
+Finalmente, la razón por la que la versión con **GPU tensor cores** supera a las demás es que aprovecha **unidades de cómputo especializadas** diseñadas para la **multiplicación de matrices de tamaño fijo**. Estas unidades pueden realizar una cantidad significativamente mayor de operaciones de punto flotante por ciclo de reloj que los CUDA cores convencionales.
+
+La multiplicación se ejecuta de forma **cooperativa a nivel de warp** (unidad de 32 hilos), utilizando **fragmentos WMMA** de tamaño fijo. Mediante la instrucción `mma_sync`, un warp completo realiza la operación entre dos bloques (16×16) de las matrices de entrada y acumula el resultado en un bloque del mismo tamaño, reemplazando múltiples operaciones aritméticas escalares por una única instrucción especializada.
+
+Además, la matriz de entrada `B` se transpone previamente para favorecer **accesos coalescentes a memoria**.
+
+Es importante notar que parte de la aceleración obtenida con tensor cores se debe a la precisión reducidas, ya que las matrices de entrada se representan en formato **half (16 bits)** en lugar de **float (32 bits)**. Esta conversión introduce un overhead adicional en el tiempo de ejecución medido, que podría evitarse si las entradas ya estuvieran originalmente en dicho formato.
+
 
 ## Hardware utilizado para los tests
 ### CPU
