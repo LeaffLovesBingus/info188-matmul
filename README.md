@@ -56,7 +56,7 @@ La multiplicación se ejecuta de forma **cooperativa a nivel de warp** (unidad d
 
 Además, la matriz de entrada `B` se transpone previamente para favorecer **accesos coalescentes a memoria**.
 
-Es importante notar que parte de la aceleración obtenida con tensor cores se debe a la precisión reducidas, ya que las matrices de entrada se representan en formato **half (16 bits)** en lugar de **float (32 bits)**. Esta conversión introduce un overhead adicional en el tiempo de ejecución medido, que podría evitarse si las entradas ya estuvieran originalmente en dicho formato.
+Es importante notar que parte de la aceleración obtenida con tensor cores se debe a la precisión reducida, ya que las matrices de entrada se representan en formato **half (16 bits)** en lugar de **float (32 bits)**, como son originalmente recibidas. La tarjeta utilizada **RTX 2060 Super** presenta un rendimiento teórico aproximado de **14.36 TFLOPS en FP16**, frente a **7.181 TFLOPS en FP32**, por lo que la conversión a FP16 permite al programa aprovechar este rendimiento ventajoso. Esta conversión introduce un overhead adicional en el tiempo de ejecución medido, que podría evitarse si las entradas ya estuvieran originalmente en dicho formato.
 
 
 ## Hardware utilizado para los tests
